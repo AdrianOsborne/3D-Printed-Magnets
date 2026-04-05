@@ -11,8 +11,12 @@ Each output model has:
 - the same raised image extrusion every time
 - a **centered bottom recess** for a **6x2 mm magnet**
 
+<img width="659" height="417" alt="image" src="https://github.com/user-attachments/assets/42ecabe3-a8f2-471c-93ed-e4e5194fdf5a" />
+<img width="659" height="417" alt="image" src="https://github.com/user-attachments/assets/c5dd69f9-b0e8-49bf-92cd-729d88235aaf" />
+<img width="659" height="417" alt="image" src="https://github.com/user-attachments/assets/4a04d47b-1215-4000-bcbf-07b235460323" />
+
+
 ## Best input types
-<img width="1576" height="593" alt="image" src="https://github.com/user-attachments/assets/d9b398dd-0a4f-4caf-8915-afa39940e9bd" />
 
 Use:
 - SVG logos and icons
@@ -25,6 +29,8 @@ Avoid:
 - detailed photos
 - soft gradients
 - very thin lines
+
+<img width="1576" height="593" alt="image" src="https://github.com/user-attachments/assets/d9b398dd-0a4f-4caf-8915-afa39940e9bd" />
 
 ## Install
 
