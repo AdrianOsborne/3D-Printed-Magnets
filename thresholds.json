@@ -1,0 +1,50 @@
+{
+  "birthday-cake.svg": {
+    "threshold": 188,
+    "invert": false
+  },
+  "bottle-cap.svg": {
+    "threshold": 0,
+    "invert": false
+  },
+  "dollar.svg": {
+    "threshold": 254,
+    "invert": false
+  },
+  "exclaimation.svg": {
+    "threshold": 254,
+    "invert": false
+  },
+  "fork-and-knife.svg": {
+    "threshold": 254,
+    "invert": false
+  },
+  "heart.svg": {
+    "threshold": 254,
+    "invert": false
+  },
+  "music.svg": {
+    "threshold": 254,
+    "invert": false
+  },
+  "recycle.svg": {
+    "threshold": 0,
+    "invert": false
+  },
+  "rubbish.svg": {
+    "threshold": 0,
+    "invert": false
+  },
+  "ticket.svg": {
+    "threshold": 0,
+    "invert": false
+  },
+  "university.svg": {
+    "threshold": 0,
+    "invert": false
+  },
+  "work-case.svg": {
+    "threshold": 0,
+    "invert": false
+  }
+}
