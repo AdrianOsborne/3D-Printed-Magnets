@@ -10,9 +10,9 @@ Each output model has:
 - the same base thickness every time
 - the same raised image extrusion every time
 - a **centered bottom recess** for a **6x2 mm magnet**
-- STL output only
 
 ## Best input types
+<img width="1576" height="593" alt="image" src="https://github.com/user-attachments/assets/d9b398dd-0a4f-4caf-8915-afa39940e9bd" />
 
 Use:
 - SVG logos and icons
@@ -37,6 +37,7 @@ You also need **OpenSCAD** installed and available in PATH because the script ex
 ## Threshold tuner UI
 
 Use the UI when some icons need different threshold settings.
+<img width="1082" height="752" alt="image" src="https://github.com/user-attachments/assets/0178b181-d65c-4046-9cc3-491d2e050cf0" />
 
 Launch it with:
 
@@ -53,17 +54,14 @@ That UI lets you:
 
 Then the main generator will automatically use `thresholds.json` if it exists.
 
-## Important fixes in this version
-
-- inner cutouts now work for shapes like bottle caps, dollar signs, and recycling icons
-- scaling now fits the artwork inside the usable circle instead of just fitting the bounding box
-- artwork is centered by its true overall shape, so corners should no longer get clipped
-
 ## Example
 
 ```bash
 python magnet_generator.py --input ./images --output ./out --thresholds-file thresholds.json
 ```
+
+<img width="672" height="378" alt="image" src="https://github.com/user-attachments/assets/bc81a8ec-a51c-4d29-9d32-f6320245b6bb" />
+
 
 ## Default shape and size
 
