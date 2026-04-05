@@ -61,6 +61,8 @@ python magnet_generator.py --input ./images --output ./out --thresholds-file thr
 ```
 
 <img width="672" height="378" alt="image" src="https://github.com/user-attachments/assets/bc81a8ec-a51c-4d29-9d32-f6320245b6bb" />
+<img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/facf7618-e7d6-4065-b5a6-dcb7ce0070f5" />
+
 
 
 ## Default shape and size
