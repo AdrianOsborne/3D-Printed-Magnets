@@ -1,8 +1,6 @@
 # Round whiteboard magnet generator
 
-This script mass-generates **STL files** for round whiteboard magnets from input images.
-
-## What it makes
+A script that mass generates **STL files** for round whiteboard magnets from input images.
 
 Each output model has:
 - a round magnet body
@@ -16,8 +14,7 @@ Each output model has:
 <img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/4a04d47b-1215-4000-bcbf-07b235460323" />
 
 
-## Best input types
-
+## Recommendations
 Use:
 - SVG logos and icons
 - simple logos
@@ -32,7 +29,7 @@ Avoid:
 
 <img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/d9b398dd-0a4f-4caf-8915-afa39940e9bd" />
 
-## Install
+## Installation
 
 ```bash
 pip install pillow opencv-python numpy cairosvg
@@ -62,21 +59,14 @@ That UI lets you:
 Then the main generator will automatically use `thresholds.json` if it exists.
 
 ## Example
-
-```bash
-python magnet_generator.py --input ./images --output ./out --thresholds-file thresholds.json
-```
-
-
 <img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/bc81a8ec-a51c-4d29-9d32-f6320245b6bb" />
 
 <img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/facf7618-e7d6-4065-b5a6-dcb7ce0070f5" />
 
 
 
-## Default shape and size
+## Defaults
 
-Defaults:
 - round diameter: 40 mm
 - base thickness: 3.0 mm
 - raised image: 0.6 mm
@@ -88,8 +78,6 @@ Defaults:
 Set your filament swap or color change at:
 
 - **3.0 mm**
-
-That is the top of the base and the start of the raised front image.
 
 ## Notes
 
