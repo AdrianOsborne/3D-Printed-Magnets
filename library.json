@@ -1,0 +1,62 @@
+{
+  "exclaimation.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "exclaimation"
+  },
+  "work-case.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "work case"
+  },
+  "birthday-cake.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "birthday cake"
+  },
+  "rubbish.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "rubbish"
+  },
+  "fork-and-knife.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "fork and knife"
+  },
+  "bottle-cap.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "bottle cap"
+  },
+  "recycle.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "recycle"
+  },
+  "heart.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "heart"
+  },
+  "music.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "music"
+  },
+  "ticket.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "ticket"
+  },
+  "university.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "university"
+  },
+  "dollar.svg": {
+    "source": "upload",
+    "enabled": true,
+    "displayName": "dollar"
+  }
+}

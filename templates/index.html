@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D Printed Magnet Studio</title>
+  <script>
+    (function () {
+      const saved = localStorage.getItem("magnet-studio-theme") || "system";
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const effective = saved === "system" ? (prefersDark ? "dark" : "light") : saved;
+      document.documentElement.dataset.themeMode = saved;
+      document.documentElement.datasetTheme = effective;
+      document.documentElement.setAttribute("data-theme", effective);
+    }());
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="app-header reveal">
+    <div class="header-bar">
+      <div class="theme-switcher" aria-label="Theme mode">
+        <button type="button" class="theme-button" data-theme-choice="system">System</button>
+        <button type="button" class="theme-button" data-theme-choice="light">Day</button>
+        <button type="button" class="theme-button" data-theme-choice="dark">Night</button>
+      </div>
+    </div>
+    <pre class="ascii-title ascii-title-header">                                                                                                                                                                                                                                                      
+  .--,-``-.                         ,-.----.                                                                                   ____                                                                                                                                  
+ /   /     '.      ,---,            \    /  \                                    ___                                         ,'  , `.                                                ___              .--.--.       ___                                              
+/ ../        ;   .'  .' `\          |   :    \            ,--,                 ,--.'|_                  ,---,             ,-+-,.' _ |                                              ,--.'|_           /  /    '.   ,--.'|_                     ,---,  ,--,            
+\ ``\  .`-    ',---.'     \         |   |  .\ :  __  ,-.,--.'|         ,---,   |  | :,'               ,---.'|          ,-+-. ;   , ||                            ,---,             |  | :,'         |  :  /`. /   |  | :,'          ,--,    ,---.'|,--.'|    ,---.   
+ \___\/   \   :|   |  .`\  |        .   :  |: |,' ,'/ /||  |,      ,-+-. /  |  :  : ' :               |   | :         ,--.'|'   |  ;|             ,----._,.  ,-+-. /  |            :  : ' :         ;  |  |--`    :  : ' :        ,'_ /|    |   | :|  |,    '   ,'\  
+      \   :   |:   : |  '  |        |   |   \ :'  | |' |`--'_     ,--.'|'   |.;__,'  /     ,---.      |   | |        |   |  ,', |  ':  ,--.--.   /   /  ' / ,--.'|'   |   ,---.  .;__,'  /          |  :  ;_    .;__,'  /    .--. |  | :    |   | |`--'_   /   /   | 
+      /  /   / |   ' '  ;  :        |   : .   /|  |   ,',' ,'|   |   |  ,"' ||  |   |     /     \   ,--.__| |        |   | /  | |  || /       \ |   :     ||   |  ,"' |  /     \ |  |   |            \  \    `. |  |   |   ,'_ /| :  . |  ,--.__| |,' ,'| .   ; ,. : 
+      \  \   \ '   | ;  .  |        ;   | |`-' '  :  /  '  | |   |   | /  | |:__,'| :    /    /  | /   ,'   |        '   | :  | :  |,.--.  .-. ||   | .\  .|   | /  | | /    /  |:__,'| :             `----.   \:__,'| :   |  ' | |  . . /   ,'   |'  | | '   | |: : 
+  ___ /   :   ||   | :  |  '        |   | ;    |  | '   |  | :   |   | |  | |  '  : |__ .    ' / |.   '  /  |        ;   . |  ; |--'  \__\/: . ..   ; ';  ||   | |  | |.    ' / |  '  : |__           __ \  \  |  '  : |__ |  | ' |  | |.   '  /  ||  | : '   | .; : 
+ /   /\   /   :'   : | /  ;         :   ' |    ;  : |   '  : |__ |   | |  |/   |  | '.'|'   ;   /|'   ; |:  |        |   : |  | ,     ," .--.; |'   .   . ||   | |  |/ '   ;   /|  |  | '.'|         /  /`--'  /  |  | '.'|:  | : ;  ; |'   ; |:  |'  : |_|   :    | 
+/ ,,/  ',-    .|   | '` ,/          :   : :    |  , ;   |  | '.'||   | |--'    ;  :    ;'   |  / ||   | '/  '        |   : '  |/     /  /  ,.  | `---`-'| ||   | |--'  '   |  / |  ;  :    ;        '--'.     /   ;  :    ;'  :  `--'   \   | '/  '|  | '.'\   \  /  
+\ ''\        ; ;   :  .'            |   | :     ---'    ;  :    ;|   |/        |  ,   / |   :    ||   :    :|        ;   | |`-'     ;  :   .'   \.'__/\_: ||   |/      |   :    |  |  ,   /           `--'---'    |  ,   / :  ,      .-./   :    :|;  :    ;`----'   
+ \   \     .'  |   ,.'              `---'.|             |  ,   / '---'          ---`-'   \   \  /  \   \  /          |   ;/         |  ,     .-./|   :    :'---'        \   \  /    ---`-'                         ---`-'   `--`----'    \   \  /  |  ,   /          
+  `--`-,,-'    '---'                  `---`              ---`-'                           `----'    `----'           '---'           `--`---'     \   \  /               `----'                                                           `----'    ---`-'           
+                                                                                                                                                   `--`-'                                                                                                            
+  </pre>
+  </header>
+
+  <div class="page-shell">
+    <aside class="sidebar-nav">
+      <div class="sidebar-card">
+        <p class="sidebar-label">Navigate</p>
+        <a href="#source-hub" class="sidebar-link">Obtain Images</a>
+        <a href="#library" class="sidebar-link">Enable Images</a>
+        <a href="#editor" class="sidebar-link">Edit Images</a>
+        <a href="#tuning" class="sidebar-link">3D Model Settings</a>
+        <a href="#generate" class="sidebar-link">STL Files</a>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <section id="source-hub" class="studio-section reveal">
+        <div class="section-head">
+          <div>
+            <p class="step-label">Step 1</p>
+            <h2>Obtain Images</h2>
+            <p>Search SVG Repo monocolor icons, upload files, or import images by URL.</p>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button type="button" class="tab-button is-active" data-tab="search">SVG Repo</button>
+          <button type="button" class="tab-button" data-tab="upload">Upload Files</button>
+          <button type="button" class="tab-button" data-tab="url">Import by URL</button>
+        </div>
+
+        <div class="tab-panel is-active" data-panel="search">
+          <div class="source-toolbar">
+            <div class="field-stack grow">
+              <label class="field-label" for="search-query">Search SVG Repo monocolor</label>
+              <input id="search-query" type="text" placeholder="dollar">
+            </div>
+            <button id="search-button" class="action-button primary" type="button">Search</button>
+          </div>
+          <p id="search-meta" class="subtle-copy">Search opens SVG Repo in a new tab using the monocolor search page.</p>
+          <div class="source-toolbar source-toolbar-url search-import-row">
+            <div class="field-stack grow">
+              <label class="field-label" for="svgrepo-url">Image URL</label>
+              <input id="svgrepo-url" type="url" placeholder="https://www.svgrepo.com/svg/532432/dollar-sign">
+            </div>
+            <button id="svgrepo-import-button" class="action-button" type="button">Import SVG Repo URL</button>
+          </div>
+          <div id="search-results" class="asset-grid search-grid"></div>
+        </div>
+
+        <div class="tab-panel" data-panel="upload">
+          <div class="source-toolbar">
+            <div class="field-stack grow">
+              <label class="field-label" for="upload-input">Upload image files</label>
+              <input id="upload-input" type="file" multiple accept=".png,.jpg,.jpeg,.bmp,.webp,.svg">
+            </div>
+          </div>
+          <div id="upload-library" class="asset-grid"></div>
+        </div>
+
+        <div class="tab-panel" data-panel="url">
+          <div class="source-toolbar source-toolbar-url">
+            <div class="field-stack grow">
+              <label class="field-label" for="svg-url">Image URL</label>
+              <input id="svg-url" type="url" placeholder="https://example.com/image.png">
+            </div>
+            <div class="field-stack">
+              <label class="field-label" for="svg-name">Saved name</label>
+              <input id="svg-name" type="text" placeholder="optional-name">
+            </div>
+            <button id="import-button" class="action-button primary" type="button">Import URL</button>
+          </div>
+          <div id="url-library" class="asset-grid"></div>
+        </div>
+      </section>
+
+      <section id="library" class="studio-section reveal">
+        <div class="section-head">
+          <div>
+            <p class="step-label">Step 2</p>
+            <h2>Enable Images</h2>
+            <p>Enable images for generation</p>
+          </div>
+        </div>
+        <div id="all-images" class="asset-grid"></div>
+      </section>
+
+      <section id="editor" class="studio-section reveal">
+        <div class="section-head">
+          <div>
+            <p class="step-label">Step 3</p>
+            <h2>Edit Images</h2>
+            <p>Select an image to modify it.</p>
+          </div>
+        </div>
+        <div id="enabled-images" class="asset-grid enabled-grid"></div>
+        <div class="editor-layout">
+          <div class="editor-panel">
+            <div class="field-stack">
+              <label class="field-label" for="rename-input">Image name</label>
+              <input id="rename-input" type="text" placeholder="Select an enabled image">
+            </div>
+            <div class="field-stack">
+              <label class="field-label" for="threshold-input">Threshold <span id="threshold-value">160</span></label>
+              <input id="threshold-input" type="range" min="0" max="255" value="160">
+            </div>
+            <label class="toggle-row">
+              <input id="invert-input" type="checkbox">
+              <span>Invert artwork before contour extraction</span>
+            </label>
+          </div>
+
+          <div class="preview-stack">
+            <figure class="preview-card">
+              <figcaption>Original preview</figcaption>
+              <img id="original-preview" alt="Original preview">
+            </figure>
+            <figure class="preview-card">
+              <figcaption>Threshold preview</figcaption>
+              <img id="mask-preview" alt="Threshold preview">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="tuning" class="studio-section reveal">
+        <div class="section-head">
+          <div>
+            <p class="step-label">Step 4</p>
+            <h2>3D Model Settings</h2>
+          </div>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-card">
+            <label class="field-label" for="diameter-input">Diameter <span class="info-dot" tabindex="0" data-tip="Overall outer diameter of the magnet in millimeters.">i</span></label>
+            <input id="diameter-input" type="number" min="10" step="0.1">
+          </div>
+          <div class="setting-card">
+            <label class="field-label" for="base-thickness-input">Base thickness <span class="info-dot" tabindex="0" data-tip="Thickness of the main disc before the raised artwork starts.">i</span></label>
+            <input id="base-thickness-input" type="number" min="0.5" step="0.1">
+          </div>
+          <div class="setting-card">
+            <label class="field-label" for="image-extrusion-input">Image extrusion <span class="info-dot" tabindex="0" data-tip="Height of the raised icon layer above the base.">i</span></label>
+            <input id="image-extrusion-input" type="number" min="0.1" step="0.1">
+          </div>
+          <div class="setting-card">
+            <label class="field-label" for="image-margin-input">Image margin <span class="info-dot" tabindex="0" data-tip="How much empty border to keep between the artwork and the magnet edge.">i</span></label>
+            <input id="image-margin-input" type="number" min="0" step="0.1">
+          </div>
+          <div class="setting-card">
+            <label class="field-label" for="pocket-diameter-input">Magnet diameter <span class="info-dot" tabindex="0" data-tip="Diameter of the recessed magnet cavity on the back.">i</span></label>
+            <input id="pocket-diameter-input" type="number" min="0.1" step="0.1">
+          </div>
+          <div class="setting-card">
+            <label class="field-label" for="pocket-depth-input">Magnet depth <span class="info-dot" tabindex="0" data-tip="Depth of the recessed magnet cavity on the back.">i</span></label>
+            <input id="pocket-depth-input" type="number" min="0.1" step="0.1">
+          </div>
+        </div>
+      </section>
+
+      <section id="generate" class="studio-section reveal">
+        <div class="section-head">
+          <div>
+            <p class="step-label">Step 5</p>
+            <h2>Generated STL files</h2>
+          </div>
+        </div>
+        <div class="generate-bar">
+          <p id="status" class="status">Workspace ready.</p>
+        </div>
+        <div id="output-list" class="output-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

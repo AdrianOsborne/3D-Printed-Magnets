@@ -77,7 +77,7 @@ def ensure_odd(value: int) -> int:
     return value if value % 2 == 1 else value + 1
 
 
-def _load_image_any_format(image_path: Path) -> Image.Image:
+def load_image_any_format(image_path: Path) -> Image.Image:
     if image_path.suffix.lower() == ".svg":
         png_bytes = cairosvg.svg2png(url=str(image_path))
         return Image.open(BytesIO(png_bytes)).convert("RGBA")
@@ -125,7 +125,7 @@ def get_settings_for_image(
 
 
 def load_and_prepare_mask(image_path: Path, settings: Settings) -> np.ndarray:
-    with _load_image_any_format(image_path) as img:
+    with load_image_any_format(image_path) as img:
         rgba = img.copy()
 
         white_bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
@@ -154,6 +154,38 @@ def load_and_prepare_mask(image_path: Path, settings: Settings) -> np.ndarray:
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=1)
     return mask
+
+
+def render_preview_images(
+    image_path: Path,
+    settings: Settings,
+    preview_size: int = 720,
+) -> Tuple[Image.Image, Image.Image]:
+    with load_image_any_format(image_path) as img:
+        rgba = img.copy()
+        white_bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+        merged = Image.alpha_composite(white_bg, rgba).convert("L")
+
+        canvas = Image.new("L", (1000, 1000), 255)
+        merged.thumbnail((1000, 1000), Image.Resampling.LANCZOS)
+        x = (1000 - merged.width) // 2
+        y = (1000 - merged.height) // 2
+        canvas.paste(merged, (x, y))
+
+        if settings.invert:
+            canvas = ImageOps.invert(canvas)
+
+        arr = np.array(canvas)
+        blur_size = ensure_odd(max(1, settings.blur))
+        if blur_size > 1:
+            arr = cv2.GaussianBlur(arr, (blur_size, blur_size), 0)
+        _, mask = cv2.threshold(arr, settings.threshold, 255, cv2.THRESH_BINARY_INV)
+
+        original = canvas.convert("RGB")
+        mask_img = Image.fromarray(mask).convert("RGB")
+        original.thumbnail((preview_size, preview_size), Image.Resampling.LANCZOS)
+        mask_img.thumbnail((preview_size, preview_size), Image.Resampling.NEAREST)
+        return original, mask_img
 
 
 def ring_area(points: Sequence[Point]) -> float:
@@ -379,6 +411,21 @@ def process_image(image_path: Path, out_dir: Path, settings: Settings) -> Path:
         export_stl(scad_path, stl_path)
 
     return stl_path
+
+
+def process_images(
+    files: Sequence[Path],
+    out_dir: Path,
+    settings: Settings,
+    overrides: Dict[str, Dict[str, object]] | None = None,
+) -> List[Tuple[Path, Path, Settings]]:
+    results: List[Tuple[Path, Path, Settings]] = []
+    override_map = overrides or {}
+    for image_path in files:
+        image_settings = get_settings_for_image(image_path, settings, override_map)
+        stl_path = process_image(image_path=image_path, out_dir=out_dir, settings=image_settings)
+        results.append((image_path, stl_path, image_settings))
+    return results
 
 
 def main() -> int:
