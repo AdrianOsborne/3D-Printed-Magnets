@@ -1,24 +1,14 @@
-#!/usr/bin/env python3
-"""
-Simple threshold tuning UI for the round whiteboard magnet generator.
-
-What it does:
-- loads images from a folder
-- previews original and thresholded versions
-- lets you set threshold and invert per image
-- saves settings to thresholds.json
-
-The generator can then use:
-python magnet_generator.py --input ./images --output ./out --thresholds-file thresholds.json
-"""
-
 from __future__ import annotations
 
 import json
 from io import BytesIO
 from pathlib import Path
+from urllib.parse import quote_plus, urlparse
+from urllib.request import urlopen
+import re
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+import webbrowser
 
 import cairosvg
 import cv2
@@ -26,6 +16,41 @@ import numpy as np
 from PIL import Image, ImageOps, ImageTk
 
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".svg"}
+SVG_SEARCH_URL = "https://www.svgrepo.com/search/?q={query}"
+
+
+def sanitize_name(text: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9_-]+", "-", text.strip()).strip("-")
+    return cleaned or "imported-icon"
+
+
+def get_unique_path(folder: Path, stem: str, suffix: str) -> Path:
+    candidate = folder / f"{stem}{suffix}"
+    counter = 2
+    while candidate.exists():
+        candidate = folder / f"{stem}-{counter}{suffix}"
+        counter += 1
+    return candidate
+
+
+def build_svg_search_url(query: str) -> str:
+    terms = query.strip() or "black white icon"
+    return SVG_SEARCH_URL.format(query=quote_plus(terms))
+
+
+def download_svg_bytes(url: str) -> bytes:
+    with urlopen(url, timeout=20) as response:
+        data = response.read()
+        content_type = response.headers.get("Content-Type", "").lower()
+    if "svg" not in content_type and b"<svg" not in data.lower():
+        raise ValueError("The URL did not return an SVG file.")
+    return data
+
+
+def suggest_svg_name(url: str) -> str:
+    parsed = urlparse(url)
+    stem = Path(parsed.path).stem
+    return sanitize_name(stem or "imported-icon")
 
 
 def load_image_any_format(image_path: Path) -> Image.Image:
@@ -77,6 +102,9 @@ class ThresholdTunerApp:
 
         self.current_original = None
         self.current_mask = None
+        self.search_var = tk.StringVar(value="black white icon")
+        self.import_url_var = tk.StringVar()
+        self.import_name_var = tk.StringVar()
 
         self.build_ui()
         self.load_existing_settings()
@@ -93,6 +121,19 @@ class ThresholdTunerApp:
 
         self.file_label = ttk.Label(top, text="No folder loaded")
         self.file_label.pack(side="left", padx=20)
+
+        search = ttk.Frame(self.root, padding=(10, 0, 10, 8))
+        search.pack(fill="x")
+
+        ttk.Label(search, text="SVG search").pack(side="left")
+        ttk.Entry(search, textvariable=self.search_var, width=28).pack(side="left", padx=(8, 6))
+        ttk.Button(search, text="Open icon database", command=self.open_svg_search).pack(side="left")
+
+        ttk.Label(search, text="SVG URL").pack(side="left", padx=(18, 6))
+        ttk.Entry(search, textvariable=self.import_url_var, width=40).pack(side="left", padx=(0, 6), fill="x", expand=True)
+        ttk.Label(search, text="Name").pack(side="left", padx=(6, 6))
+        ttk.Entry(search, textvariable=self.import_name_var, width=18).pack(side="left", padx=(0, 6))
+        ttk.Button(search, text="Import and preview", command=self.import_svg_from_url).pack(side="left")
 
         controls = ttk.Frame(self.root, padding=(10, 0, 10, 10))
         controls.pack(fill="x")
@@ -159,6 +200,38 @@ class ThresholdTunerApp:
         folder = filedialog.askdirectory(initialdir=str(self.image_dir if self.image_dir.exists() else Path.cwd()))
         if folder:
             self.load_directory(Path(folder))
+
+    def open_svg_search(self):
+        try:
+            webbrowser.open(build_svg_search_url(self.search_var.get()), new=2)
+        except Exception as exc:
+            messagebox.showerror("Search error", f"Could not open the icon database.\n\n{exc}")
+
+    def import_svg_from_url(self):
+        url = self.import_url_var.get().strip()
+        if not url:
+            messagebox.showerror("Import error", "Enter an SVG URL to import.")
+            return
+
+        try:
+            svg_bytes = download_svg_bytes(url)
+            target_dir = self.image_dir
+            target_dir.mkdir(parents=True, exist_ok=True)
+            stem = sanitize_name(self.import_name_var.get()) if self.import_name_var.get().strip() else suggest_svg_name(url)
+            target_path = get_unique_path(target_dir, stem, ".svg")
+            target_path.write_bytes(svg_bytes)
+        except Exception as exc:
+            messagebox.showerror("Import error", f"Could not import the SVG.\n\n{exc}")
+            return
+
+        self.load_directory(target_dir)
+        try:
+            self.index = self.files.index(target_path)
+        except ValueError:
+            self.index = 0
+        self.show_current()
+        self.import_name_var.set(target_path.stem)
+        self.info_label.config(text=f"Imported {target_path.name} into {target_dir}. Preview is ready.")
 
     def load_directory(self, folder: Path):
         self.image_dir = folder

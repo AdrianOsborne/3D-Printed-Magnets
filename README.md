@@ -54,6 +54,8 @@ That UI lets you:
 - preview the thresholded mask
 - adjust threshold per image
 - toggle invert per image
+- open an SVG icon database search for black and white artwork
+- import an SVG from a URL directly into `images`
 - save everything into `thresholds.json`
 
 Then the main generator will automatically use `thresholds.json` if it exists.
